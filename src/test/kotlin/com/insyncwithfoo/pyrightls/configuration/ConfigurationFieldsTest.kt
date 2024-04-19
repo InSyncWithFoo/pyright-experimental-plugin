@@ -48,6 +48,7 @@ class ConfigurationFieldsTest : TestCase() {
         configurations.run {
             assertEquals(null, projectExecutable)
             assertEquals(true, autoSuggestExecutable)
+            
             assertEquals(WorkspaceFolders.PROJECT_BASE, workspaceFolders)
         }
     }
