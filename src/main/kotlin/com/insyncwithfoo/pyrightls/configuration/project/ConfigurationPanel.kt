@@ -10,12 +10,16 @@ import com.insyncwithfoo.pyrightls.configuration.secondColumnPathInput
 import com.insyncwithfoo.pyrightls.message
 import com.insyncwithfoo.pyrightls.path
 import com.insyncwithfoo.pyrightls.resolvedAgainst
+import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
+import com.intellij.ui.SimpleListCellRenderer
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.dsl.builder.Cell
 import com.intellij.ui.dsl.builder.Row
+import com.intellij.ui.dsl.builder.bindItem
 import com.intellij.ui.dsl.builder.bindSelected
 import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.toNullableProperty
 
 
 private fun unresolvablePathHint() =
@@ -28,6 +32,15 @@ private fun Row.makeProjectExecutableInput(block: Cell<TextFieldWithBrowseButton
 
 private fun Row.makeAutoSuggestExecutableInput(block: Cell<JBCheckBox>.() -> Unit) =
     checkBox(message("configurations.project.autoSuggestExecutable.label")).apply(block)
+
+
+private fun Row.makeWorkspaceFoldersInput(block: Cell<ComboBox<WorkspaceFolders>>.() -> Unit) = run {
+    val renderer = SimpleListCellRenderer.create<WorkspaceFolders> { label, value, _ ->
+        label.text = value.label
+    }
+    
+    comboBox(WorkspaceFolders.entries, renderer).apply(block)
+}
 
 
 internal fun Configurable.configurationPanel(state: Configurations) = panel {
@@ -48,6 +61,13 @@ internal fun Configurable.configurationPanel(state: Configurations) = panel {
             
             prefilledWithRandomPlaceholder()
             bindText(state::projectExecutable)
+        }
+    }
+    
+    @Suppress("DialogTitleCapitalization")
+    group(message("configurations.global.group.languageServer")) {
+        row(message("configurations.project.workspaceFolders.label")) {
+            makeWorkspaceFoldersInput { bindItem(state::workspaceFolders.toNullableProperty()) }
         }
     }
     

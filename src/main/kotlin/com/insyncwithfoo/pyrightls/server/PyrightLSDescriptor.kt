@@ -1,20 +1,42 @@
 package com.insyncwithfoo.pyrightls.server
 
+import com.insyncwithfoo.pyrightls.configuration.project.WorkspaceFolders
 import com.insyncwithfoo.pyrightls.message
 import com.insyncwithfoo.pyrightls.path
 import com.insyncwithfoo.pyrightls.pyrightLSConfigurations
 import com.intellij.execution.configurations.GeneralCommandLine
+import com.intellij.openapi.project.BaseProjectDirectories.Companion.getBaseDirectories
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.modules
+import com.intellij.openapi.roots.ModuleRootManager
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.platform.lsp.api.ProjectWideLspServerDescriptor
+import com.intellij.platform.lsp.api.LspServerDescriptor
 import java.nio.file.Path
 
 
+private fun Project.getModuleSourceRoots(): Collection<VirtualFile> =
+    modules.flatMap { module ->
+        ModuleRootManager.getInstance(module).sourceRoots.asIterable()
+    }
+
+
+private fun Project.getWorkspaceFolders(type: WorkspaceFolders): Collection<VirtualFile> {
+    return when (type) {
+        WorkspaceFolders.PROJECT_BASE -> this.getBaseDirectories()
+        WorkspaceFolders.SOURCE_ROOTS -> this.getModuleSourceRoots()
+    }
+}
+
+
+private fun Project.getWorkspaceFolders(): Collection<VirtualFile> {
+    val configurations = this.pyrightLSConfigurations
+    return this.getWorkspaceFolders(configurations.workspaceFolders)
+}
+
+
 @Suppress("UnstableApiUsage")
-internal class PyrightLSDescriptor(
-    project: Project,
-    private val executable: Path
-) : ProjectWideLspServerDescriptor(project, PRESENTABLE_NAME) {
+internal class PyrightLSDescriptor(project: Project, private val executable: Path) :
+    LspServerDescriptor(project, PRESENTABLE_NAME, *project.getWorkspaceFolders().toTypedArray()) {
     
     private val configurations = project.pyrightLSConfigurations
     
