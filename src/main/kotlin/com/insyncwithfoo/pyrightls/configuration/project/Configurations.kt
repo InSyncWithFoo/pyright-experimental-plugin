@@ -4,21 +4,27 @@ import com.insyncwithfoo.pyrightls.message
 import com.intellij.openapi.components.BaseState
 
 
-internal typealias DelimitedFileExtensions = String
-internal typealias TargetedFileExtensions = List<String>
+internal typealias FileExtension = String
+internal typealias DelimitedFileExtensionList = String
 
 
-internal const val fileExtensionsDelimiter = "|"
+private const val fileExtensionsDelimiter = "|"
 
 
-internal fun DelimitedFileExtensions.split(): MutableList<String> {
-    return this.split(fileExtensionsDelimiter).mapTo(mutableListOf()) { it.trim().lowercase() }
-}
+private fun FileExtension.normalize() =
+    this.trim().lowercase().takeIf { it.isNotEmpty() }
 
 
-internal fun TargetedFileExtensions.join(): String {
-    return this.joinToString(fileExtensionsDelimiter) { it.trim().lowercase() }
-}
+private fun List<FileExtension>.toSetOfNormalized(): Set<FileExtension> =
+    this.mapNotNullTo(mutableSetOf()) { it.normalize() }
+
+
+internal fun DelimitedFileExtensionList.split(): MutableList<FileExtension> =
+    this.split(fileExtensionsDelimiter).toSetOfNormalized().toMutableList()
+
+
+internal fun List<FileExtension>.join() =
+    this.toSetOfNormalized().joinToString(fileExtensionsDelimiter)
 
 
 internal enum class WorkspaceFolders(val label: String) {
@@ -31,5 +37,5 @@ internal class Configurations : BaseState() {
     var projectExecutable by string(null)
     var autoSuggestExecutable by property(true)
     var workspaceFolders by enum(WorkspaceFolders.PROJECT_BASE)
-    var targetedFileExtensions by string("py")
+    var targetedFileExtensions by string(listOf("py").join())
 }

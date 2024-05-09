@@ -48,8 +48,8 @@ private fun Row.makeWorkspaceFoldersInput(block: Cell<ComboBox<WorkspaceFolders>
 
 
 private fun Row.makeFileExtensionsInput(block: Cell<ExpandableTextField>.() -> Unit) {
-    val parser = DelimitedFileExtensions::split
-    val joiner = TargetedFileExtensions::join
+    val parser = DelimitedFileExtensionList::split
+    val joiner = List<FileExtension>::join
     
     expandableTextField(parser, joiner).asSecondColumnInput().apply(block)
 }
