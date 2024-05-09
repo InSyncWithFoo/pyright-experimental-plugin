@@ -22,7 +22,6 @@ import com.intellij.ui.dsl.builder.bindItem
 import com.intellij.ui.dsl.builder.bindSelected
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.builder.toNonNullableProperty
 import com.intellij.ui.dsl.builder.toNullableProperty
 
 
@@ -47,7 +46,7 @@ private fun Row.makeWorkspaceFoldersInput(block: Cell<ComboBox<WorkspaceFolders>
 }
 
 
-private fun Row.makeFileExtensionsInput(block: Cell<ExpandableTextField>.() -> Unit) {
+private fun Row.makeTargetedFileExtensionsInput(block: Cell<ExpandableTextField>.() -> Unit) = run {
     val parser = DelimitedFileExtensionList::split
     val joiner = List<FileExtension>::join
     
@@ -79,9 +78,12 @@ internal fun Configurable.configurationPanel(state: Configurations) = panel {
     @Suppress("DialogTitleCapitalization")
     group(message("configurations.group.languageServer")) {
         row(message("configurations.targetedFileExtensions.label")) {
-            makeFileExtensionsInput {
+            makeTargetedFileExtensionsInput {
                 comment(message("configurations.targetedFileExtensions.comment"))
-                bindText(state::targetedFileExtensions.toNonNullableProperty(defaultValue = ""))
+                bindText(
+                    { state.targetedFileExtensions.orEmpty().deduplicate() },
+                    { state.targetedFileExtensions = it.deduplicate() }
+                )
             }
         }
         row(message("configurations.workspaceFolders.label")) {

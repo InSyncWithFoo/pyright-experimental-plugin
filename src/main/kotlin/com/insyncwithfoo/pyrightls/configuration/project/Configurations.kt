@@ -11,12 +11,11 @@ internal typealias DelimitedFileExtensionList = String
 private const val fileExtensionsDelimiter = "|"
 
 
-private fun FileExtension.normalize() =
-    this.trim().lowercase().takeIf { it.isNotEmpty() }
+private fun FileExtension.normalize() = this.trim().lowercase()
 
 
 private fun List<FileExtension>.toSetOfNormalized(): Set<FileExtension> =
-    this.mapNotNullTo(mutableSetOf()) { it.normalize() }
+    this.mapTo(mutableSetOf()) { it.normalize() }
 
 
 internal fun DelimitedFileExtensionList.split(): MutableList<FileExtension> =
@@ -25,6 +24,10 @@ internal fun DelimitedFileExtensionList.split(): MutableList<FileExtension> =
 
 internal fun List<FileExtension>.join() =
     this.toSetOfNormalized().joinToString(fileExtensionsDelimiter)
+
+
+internal fun DelimitedFileExtensionList.deduplicate() =
+    this.split().join()
 
 
 internal enum class WorkspaceFolders(val label: String) {
