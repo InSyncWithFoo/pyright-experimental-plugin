@@ -1,6 +1,7 @@
 package com.insyncwithfoo.pyrightls.server
 
 import com.insyncwithfoo.pyrightls.configuration.project.WorkspaceFolders
+import com.insyncwithfoo.pyrightls.configuration.project.split
 import com.insyncwithfoo.pyrightls.message
 import com.insyncwithfoo.pyrightls.path
 import com.insyncwithfoo.pyrightls.pyrightLSConfigurations
@@ -50,7 +51,8 @@ internal class PyrightLSDescriptor(project: Project, private val executable: Pat
         LOGGER.info(configurations.toString())
     }
     
-    override fun isSupportedFile(file: VirtualFile) = file.isSupported
+    override fun isSupportedFile(file: VirtualFile) =
+        file.extension in configurations.targetedFileExtensions.orEmpty().split()
     
     override fun createCommandLine() =
         GeneralCommandLine(executable.toString(), "--stdio").apply {

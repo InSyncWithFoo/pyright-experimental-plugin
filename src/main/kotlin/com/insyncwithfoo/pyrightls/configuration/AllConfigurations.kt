@@ -1,6 +1,7 @@
 package com.insyncwithfoo.pyrightls.configuration
 
 import com.insyncwithfoo.pyrightls.configuration.application.LogLevel
+import com.insyncwithfoo.pyrightls.configuration.project.DelimitedFileExtensions
 import com.insyncwithfoo.pyrightls.configuration.project.WorkspaceFolders
 import org.jetbrains.annotations.SystemDependent
 import com.insyncwithfoo.pyrightls.configuration.application.Configurations as ApplicationConfigurations
@@ -26,7 +27,8 @@ internal infix fun ApplicationConfigurations.mergeWith(other: ProjectConfigurati
         
         projectExecutable = other.projectExecutable,
         autoSuggestExecutable = other.autoSuggestExecutable,
-        workspaceFolders = other.workspaceFolders
+        workspaceFolders = other.workspaceFolders,
+        targetedFileExtensions = other.targetedFileExtensions
     )
 
 
@@ -48,7 +50,8 @@ internal data class AllConfigurations(
     
     val projectExecutable: @SystemDependent String?,
     val autoSuggestExecutable: Boolean,
-    val workspaceFolders: WorkspaceFolders
+    val workspaceFolders: WorkspaceFolders,
+    val targetedFileExtensions: DelimitedFileExtensions?
 ) {
     val executable: @SystemDependent String?
         get() = when {

@@ -47,13 +47,14 @@ class ConfigurationFieldsTest : TestCase() {
     fun `test defaults - project`() {
         val configurations = ProjectConfigurations()
         
-        assertEquals(3, projectFields().size)
+        assertEquals(4, projectFields().size)
         
         configurations.run {
             assertEquals(null, projectExecutable)
             assertEquals(true, autoSuggestExecutable)
             
             assertEquals(WorkspaceFolders.PROJECT_BASE, workspaceFolders)
+            assertEquals("py", targetedFileExtensions)
         }
     }
     
