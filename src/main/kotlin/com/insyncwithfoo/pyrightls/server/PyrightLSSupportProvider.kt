@@ -2,6 +2,7 @@ package com.insyncwithfoo.pyrightls.server
 
 import com.insyncwithfoo.pyrightls.PyrightLSInspection
 import com.insyncwithfoo.pyrightls.configuration.ConfigurationService
+import com.insyncwithfoo.pyrightls.pyrightLSConfigurations
 import com.intellij.codeInspection.ex.InspectionToolRegistrar
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
@@ -44,7 +45,9 @@ internal class PyrightLSSupportProvider : LspServerSupportProvider {
         file: VirtualFile,
         serverStarter: LspServerSupportProvider.LspServerStarter
     ) {
-        if (file.isSupported && project.isPyrightLSEnabled) {
+        val fileIsSupported = file.extension in project.pyrightLSConfigurations.targetedFileExtensionList
+        
+        if (fileIsSupported && project.isPyrightLSEnabled) {
             val executable = project.pyrightLSExecutable?.takeIf { it.exists() } ?: return
             val descriptor = PyrightLSDescriptor(project, executable)
             
