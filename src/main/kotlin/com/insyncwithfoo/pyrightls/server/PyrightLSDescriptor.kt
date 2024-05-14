@@ -4,6 +4,7 @@ import com.insyncwithfoo.pyrightls.configuration.project.WorkspaceFolders
 import com.insyncwithfoo.pyrightls.message
 import com.insyncwithfoo.pyrightls.path
 import com.insyncwithfoo.pyrightls.pyrightLSConfigurations
+import com.insyncwithfoo.pyrightls.server.diagnostics.DiagnosticsSupport
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.BaseProjectDirectories.Companion.getBaseDirectories

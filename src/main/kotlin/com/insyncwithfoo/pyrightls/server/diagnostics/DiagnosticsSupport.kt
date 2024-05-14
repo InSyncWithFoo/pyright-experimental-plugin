@@ -1,11 +1,14 @@
-package com.insyncwithfoo.pyrightls.server
+package com.insyncwithfoo.pyrightls.server.diagnostics
 
 import com.insyncwithfoo.pyrightls.HighlightSeverity
 import com.insyncwithfoo.pyrightls.PyrightLSInspection
 import com.insyncwithfoo.pyrightls.pyrightLSConfigurations
+import com.intellij.codeInsight.intention.IntentionAction
+import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.ex.util.EditorUtil
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.TextRange
 import com.intellij.openapi.util.text.HtmlChunk
 import com.intellij.platform.lsp.api.customization.LspDiagnosticsSupport
 import com.intellij.profile.codeInspection.InspectionProjectProfileManager
@@ -47,6 +50,13 @@ private val Diagnostic.suffixedMessage: String
     get() = "$message$rawCodeSuffix"
 
 
+private val Diagnostic.isUnsuppressable: Boolean
+    get() {
+        val unsuppressableErrorCodes = listOf("reportUnnecessaryTypeIgnoreComment")
+        
+        return codeAsString in unsuppressableErrorCodes
+    }
+
 private fun Project.getPyrightLSInspection(): PyrightLSInspection {
     val inspectionManager = InspectionProjectProfileManager.getInstance(this)
     val profile = inspectionManager.currentProfile
@@ -85,6 +95,21 @@ internal class DiagnosticsSupport(private val project: Project) : LspDiagnostics
         val codeSuffix = diagnostic.codeAsString?.toCodeSuffix(font, descriptionHref).orEmpty()
         
         return tooltip.toPreformattedBlock(font).addRaw(codeSuffix).toString()
+    }
+    
+    override fun createAnnotation(
+        holder: AnnotationHolder,
+        diagnostic: Diagnostic,
+        textRange: TextRange,
+        quickFixes: List<IntentionAction>
+    ) {
+        val fix = when {
+            diagnostic.isUnsuppressable -> null
+            else -> SuppressQuickFix(diagnostic.codeAsString, textRange)
+        }
+        val newQuickFixes = quickFixes + listOfNotNull(fix)
+        
+        super.createAnnotation(holder, diagnostic, textRange, newQuickFixes)
     }
     
 }

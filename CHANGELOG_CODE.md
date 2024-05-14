@@ -16,26 +16,29 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
 
 * [`PyrightLSDescriptor`][40-1] now logs all configurations on initialization.
   (501b9cea)
+* Diagnostics-related construct, including those newly added for quick fixes,
+  are moved to the [`.diagnostics`][40-2] module. (HEAD)
 
 ### Changed
 
-* [The Qodana Gradle plugin][40-2] and its corresponding action
-  [@JetBrains/qodana-action][40-3] are updated to 2024.1.4.
+* [The Qodana Gradle plugin][40-3] and its corresponding action
+  [@JetBrains/qodana-action][40-4] are updated to 2024.1.4.
   (647bd2d5, 26a9fcf9, b952ef10, 1ae17a00, bed1cfe6, 6bd68dfd)
-* A new branch is added to [`executablePathResolvingHint()`][40-4]. (906f7abe)
-* [Kotlin JVM plugin][40-5] is updated to 1.9.24. (0e28e9ae)
-* `RoamingType.LOCAL` is used for [application-level configurations][40-6]
+* A new branch is added to [`executablePathResolvingHint()`][40-5]. (906f7abe)
+* [Kotlin JVM plugin][40-6] is updated to 1.9.24. (0e28e9ae)
+* `RoamingType.LOCAL` is used for [application-level configurations][40-7]
   instead of `RoamingType.DISABLED`. (ac6bf02a)
 * The "Run Plugin" task now runs with the new UI enabled and
   the `.idea` subdirectory not hidden. (5fb15568)
 
 
   [40-1]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/blob/501b9cea/src/main/kotlin/com/insyncwithfoo/pyrightls/server/PyrightLSDescriptor.kt
-  [40-2]: https://plugins.gradle.org/plugin/org.jetbrains.qodana
-  [40-3]: https://github.com/JetBrains/qodana-action
-  [40-4]: https://github.com/InSyncWithFoo/pyright-for-pycharm/blob/906f7abe/src/main/kotlin/com/insyncwithfoo/pyright/configuration/PathResolvingHint.kt
-  [40-5]: https://plugins.gradle.org/plugin/org.jetbrains.kotlin.jvm
-  [40-6]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/blob/ac6bf02a/src/main/kotlin/com/insyncwithfoo/pyrightls/configuration/application/ConfigurationService.kt
+  [40-2]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/blob/HEAD/src/main/kotlin/com/insyncwithfoo/pyrightls/server/diagnostics
+  [40-3]: https://plugins.gradle.org/plugin/org.jetbrains.qodana
+  [40-4]: https://github.com/JetBrains/qodana-action
+  [40-5]: https://github.com/InSyncWithFoo/pyright-for-pycharm/blob/906f7abe/src/main/kotlin/com/insyncwithfoo/pyright/configuration/PathResolvingHint.kt
+  [40-6]: https://plugins.gradle.org/plugin/org.jetbrains.kotlin.jvm
+  [40-7]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/blob/ac6bf02a/src/main/kotlin/com/insyncwithfoo/pyrightls/configuration/application/ConfigurationService.kt
 
 
 ## [0.3.0] - 2024-04-24
