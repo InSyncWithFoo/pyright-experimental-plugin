@@ -76,8 +76,10 @@ class SuppressQuickFix(
     
     override fun getText() = "Suppress ${code ?: "this Pyright diagnostic"}"
     
-    override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?) =
-        editor != null && editor.caretModel.offset in range
+    override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean {
+        val offset = editor?.caretModel?.offset ?: return false
+        return range.startOffset <= offset && offset <= range.endOffset
+    }
     
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
         if (editor == null || file == null) {
