@@ -25,4 +25,5 @@ internal class Configurations : BaseState() {
     var logLevel by enum(LogLevel.INFORMATION)
     var taggedHints by property(true)
     var autoImportCompletions by property(true)
+    var autocompleteParentheses by property(false)
 }

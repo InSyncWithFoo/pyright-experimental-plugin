@@ -65,6 +65,10 @@ private fun Row.makeLogLevelInput(block: Cell<ComboBox<LogLevel>>.() -> Unit) = 
 }
 
 
+private fun Row.makeAutocompleteParenthesesInput(block: Cell<JBCheckBox>.() -> Unit) =
+    checkBox(message("configurations.autocompleteParentheses.label")).apply(block)
+
+
 private fun Row.makeTaggedHintsInput(block: Cell<JBCheckBox>.() -> Unit) =
     checkBox(message("configurations.taggedHints.label")).apply(block)
 
@@ -113,6 +117,9 @@ internal fun configurationPanel(state: Configurations) = panel {
                 makeHoverSupportInput { bindSelected(state::hoverSupport) }
                 makeCompletionSupportInput { bindSelected(state::completionSupport) }
                 makeGoToDefinitionSupportInput { bindSelected(state::goToDefinitionSupport) }
+            }
+            row {
+                makeAutocompleteParenthesesInput { bindSelected(state::autocompleteParentheses) }
             }
         }
         buttonsGroup(message("configurations.group.languageServer.server")) {
