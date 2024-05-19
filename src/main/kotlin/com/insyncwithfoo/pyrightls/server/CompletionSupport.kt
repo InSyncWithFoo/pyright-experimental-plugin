@@ -17,8 +17,7 @@ private val CompletionItem.isCallable: Boolean
     get() = kind in listOf(
         CompletionItemKind.Method,
         CompletionItemKind.Function,
-        CompletionItemKind.Constructor,
-        CompletionItemKind.Class
+        CompletionItemKind.Constructor
     )
 
 
