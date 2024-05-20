@@ -1,5 +1,6 @@
 package com.insyncwithfoo.pyrightls.server
 
+import com.google.gson.JsonObject
 import com.insyncwithfoo.pyrightls.pyrightLSConfigurations
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.lookup.LookupElement
@@ -21,6 +22,25 @@ private val CompletionItem.isCallable: Boolean
     )
 
 
+private val CompletionItem.isAutoImportCompletion: Boolean
+    get() {
+        val data = this.data
+        return data is JsonObject && data.has("autoImportText")
+    }
+
+
+private fun CompletionItem.completeWithParentheses() {
+    insertText = "$label($CARET_POSITION)"
+    insertTextFormat = InsertTextFormat.Snippet
+}
+
+
+private fun CompletionItem.useSourceAsDetail() {
+    // https://github.com/microsoft/pyright/blob/0b7860b/packages/pyright-internal/src/languageService/completionProvider.ts#L932-L934
+    detail = labelDetails.description
+}
+
+
 @Suppress("UnstableApiUsage")
 internal class CompletionSupport(project: Project) : LspCompletionSupport() {
     
@@ -28,8 +48,11 @@ internal class CompletionSupport(project: Project) : LspCompletionSupport() {
     
     override fun createLookupElement(parameters: CompletionParameters, item: CompletionItem): LookupElement? {
         if (item.isCallable && configurations.autocompleteParentheses) {
-            item.insertText = "${item.label}($CARET_POSITION)"
-            item.insertTextFormat = InsertTextFormat.Snippet
+            item.completeWithParentheses()
+        }
+        
+        if (item.isAutoImportCompletion) {
+            item.useSourceAsDetail()
         }
         
         return super.createLookupElement(parameters, item)
