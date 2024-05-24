@@ -1,9 +1,10 @@
-package com.insyncwithfoo.pyrightls.server
+package com.insyncwithfoo.pyrightls.server.completion
 
 import com.google.gson.JsonObject
 import com.insyncwithfoo.pyrightls.pyrightLSConfigurations
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.lookup.LookupElement
+import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.project.Project
 import com.intellij.platform.lsp.api.customization.LspCompletionSupport
 import org.eclipse.lsp4j.CompletionItem
@@ -41,12 +42,18 @@ private fun CompletionItem.useSourceAsDetailIfPossible() {
 }
 
 
+private fun CompletionItem.nullifyIncomprehensibleDefaultInsertingBehaviour() {
+    textEdit = null
+    insertText = ""
+}
+
+
 @Suppress("UnstableApiUsage")
 internal class CompletionSupport(project: Project) : LspCompletionSupport() {
     
     private val configurations = project.pyrightLSConfigurations
     
-    override fun createLookupElement(parameters: CompletionParameters, item: CompletionItem): LookupElement? {
+    override fun createLookupElement(parameters: CompletionParameters, item: CompletionItem): LookupElement {
         if (item.isCallable && configurations.autocompleteParentheses) {
             item.completeWithParentheses()
         }
@@ -55,7 +62,12 @@ internal class CompletionSupport(project: Project) : LspCompletionSupport() {
             item.useSourceAsDetailIfPossible()
         }
         
-        return super.createLookupElement(parameters, item)
+        val edit = item.textEdit
+        item.nullifyIncomprehensibleDefaultInsertingBehaviour()
+        
+        val builder = super.createLookupElement(parameters, item) as LookupElementBuilder
+        
+        return CompletionDecorator(builder, edit)
     }
     
 }
