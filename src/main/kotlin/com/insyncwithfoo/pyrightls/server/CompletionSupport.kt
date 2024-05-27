@@ -61,8 +61,8 @@ private fun CompletionItem.useSourceAsDetailIfPossible() {
 }
 
 
-private fun CompletionItem.removeTrailingQuote() {
-    insertText = label.dropLast(1)
+private fun CompletionItem.removeTrailingQuotes() {
+    insertText = label.dropLastWhile { it == quote }
 }
 
 
@@ -81,7 +81,7 @@ internal class CompletionSupport(project: Project) : LspCompletionSupport() {
         }
         
         if (item.isQuoted && parameters.nextCharacter == item.quote) {
-            item.removeTrailingQuote()
+            item.removeTrailingQuotes()
         }
         
         return super.createLookupElement(parameters, item)
