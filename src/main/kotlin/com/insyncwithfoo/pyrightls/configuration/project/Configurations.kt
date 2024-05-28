@@ -4,11 +4,11 @@ import com.insyncwithfoo.pyrightls.message
 import com.intellij.openapi.components.BaseState
 
 
+private const val FILE_EXTENSIONS_DELIMITER = "|"
+
+
 internal typealias FileExtension = String
 internal typealias DelimitedFileExtensionList = String
-
-
-private const val fileExtensionsDelimiter = "|"
 
 
 private fun FileExtension.normalize() = this.trim().lowercase()
@@ -19,11 +19,11 @@ private fun List<FileExtension>.toSetOfNormalized(): Set<FileExtension> =
 
 
 internal fun DelimitedFileExtensionList.split(): MutableList<FileExtension> =
-    this.split(fileExtensionsDelimiter).toSetOfNormalized().toMutableList()
+    this.split(FILE_EXTENSIONS_DELIMITER).toSetOfNormalized().toMutableList()
 
 
 internal fun List<FileExtension>.join() =
-    this.toSetOfNormalized().joinToString(fileExtensionsDelimiter)
+    this.toSetOfNormalized().joinToString(FILE_EXTENSIONS_DELIMITER)
 
 
 internal fun DelimitedFileExtensionList.deduplicate() =

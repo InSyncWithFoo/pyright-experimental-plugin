@@ -79,7 +79,6 @@ internal fun Configurable.configurationPanel(state: Configurations) = panel {
     group(message("configurations.group.languageServer")) {
         row(message("configurations.targetedFileExtensions.label")) {
             makeTargetedFileExtensionsInput {
-                comment(message("configurations.targetedFileExtensions.comment"))
                 bindText(
                     { state.targetedFileExtensions.orEmpty().deduplicate() },
                     { state.targetedFileExtensions = it.deduplicate() }

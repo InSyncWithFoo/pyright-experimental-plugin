@@ -33,10 +33,6 @@ private val Project.pyrightLSExecutable: Path?
     }
 
 
-internal val VirtualFile.isSupported: Boolean
-    get() = extension == "py"
-
-
 @Suppress("UnstableApiUsage")
 internal class PyrightLSSupportProvider : LspServerSupportProvider {
     
