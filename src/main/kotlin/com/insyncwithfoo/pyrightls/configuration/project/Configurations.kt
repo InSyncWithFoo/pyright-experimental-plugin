@@ -15,7 +15,9 @@ private fun FileExtension.normalize() = this.trim().lowercase()
 
 
 private fun List<FileExtension>.toSetOfNormalized(): Set<FileExtension> =
-    this.mapTo(mutableSetOf()) { it.normalize() }
+    this.mapNotNullTo(mutableSetOf()) { extension ->
+        extension.normalize().takeIf { it.isNotEmpty() }
+    }
 
 
 internal fun DelimitedFileExtensionList.split(): MutableList<FileExtension> =
