@@ -13,13 +13,15 @@ import org.eclipse.lsp4j.InsertTextFormat
 
 private const val CARET_POSITION = "\$0"
 
+private const val doubleQuote = "\""
+private const val singleQuote = "'"
+private const val tripleDoubleQuote = "\"\"\""
+private const val tripleSingleQuote = "'''"
 
-private val String.isSingleQuoted: Boolean
-    get() = this.startsWith("'") && this.endsWith("'")
 
-
-private val String.isDoubleQuoted: Boolean
-    get() = this.startsWith("\"") && this.endsWith("\"")
+private val quoteSequences by lazy {
+    listOf(tripleDoubleQuote, doubleQuote, tripleSingleQuote, singleQuote)
+}
 
 
 private val CompletionItem.isCallable: Boolean
@@ -38,15 +40,15 @@ private val CompletionItem.isAutoImportCompletion: Boolean
 
 
 private val CompletionItem.isQuoted: Boolean
-    get() = label.isSingleQuoted || label.isDoubleQuoted
+    get() = quoteSequence != null
 
 
-private val CompletionItem.quote: Char
-    get() = label[0]
+private val CompletionItem.quoteSequence: String?
+    get() = quoteSequences.find { label.startsWith(it) && label.endsWith(it) }
 
 
-private val CompletionParameters.nextCharacter: Char
-    get() = editor.document.charsSequence[offset]
+private val CompletionParameters.followingCharacters: CharSequence
+    get() = editor.document.charsSequence.slice(offset..offset + 2)
 
 
 private fun CompletionItem.completeWithParentheses() {
@@ -61,8 +63,8 @@ private fun CompletionItem.useSourceAsDetailIfPossible() {
 }
 
 
-private fun CompletionItem.removeTrailingQuotes() {
-    insertText = label.dropLastWhile { it == quote }
+private fun CompletionItem.removeTrailingQuoteSequence() {
+    insertText = label.dropLast(quoteSequence!!.length)
 }
 
 
@@ -80,8 +82,8 @@ internal class CompletionSupport(project: Project) : LspCompletionSupport() {
             item.useSourceAsDetailIfPossible()
         }
         
-        if (item.isQuoted && parameters.nextCharacter == item.quote) {
-            item.removeTrailingQuotes()
+        if (item.isQuoted && parameters.followingCharacters.startsWith(item.quoteSequence!!)) {
+            item.removeTrailingQuoteSequence()
         }
         
         return super.createLookupElement(parameters, item)
