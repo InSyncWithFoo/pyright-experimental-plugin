@@ -1,5 +1,6 @@
 package com.insyncwithfoo.pyrightls.server.diagnostics
 
+import com.insyncwithfoo.pyrightls.message
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.Editor
@@ -72,9 +73,12 @@ internal class SuppressQuickFix(
     
     override fun startInWriteAction() = true
     
-    override fun getFamilyName() = "Suppress Pyright diagnostics"
+    override fun getFamilyName() = message("quickFixes.suppress.familyName")
     
-    override fun getText() = "Suppress ${code ?: "this Pyright diagnostic"}"
+    override fun getText() = when {
+        code != null -> message("quickFixes.suppress.name", code)
+        else -> message("quickFixes.suppress.name.noCode")
+    }
     
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean {
         val offset = editor?.caretModel?.offset ?: return false

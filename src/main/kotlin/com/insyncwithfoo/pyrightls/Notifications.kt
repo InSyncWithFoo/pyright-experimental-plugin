@@ -8,7 +8,7 @@ import com.intellij.openapi.project.Project
 
 
 private const val ID = "Pyright LS notifications"
-private val ICON = PyrightLSIcon.COLORED_SMALL
+private val ICON = Icon.COLORED_SMALL
 
 
 internal fun Notification.prettify() = apply {

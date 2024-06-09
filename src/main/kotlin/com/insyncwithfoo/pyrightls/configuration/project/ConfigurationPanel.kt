@@ -1,6 +1,7 @@
 package com.insyncwithfoo.pyrightls.configuration.project
 
 import com.insyncwithfoo.pyrightls.configuration.Hint
+import com.insyncwithfoo.pyrightls.configuration.asSecondColumnInput
 import com.insyncwithfoo.pyrightls.configuration.bindText
 import com.insyncwithfoo.pyrightls.configuration.displayPathHint
 import com.insyncwithfoo.pyrightls.configuration.executablePathResolvingHint
@@ -14,10 +15,12 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.SimpleListCellRenderer
 import com.intellij.ui.components.JBCheckBox
+import com.intellij.ui.components.fields.ExpandableTextField
 import com.intellij.ui.dsl.builder.Cell
 import com.intellij.ui.dsl.builder.Row
 import com.intellij.ui.dsl.builder.bindItem
 import com.intellij.ui.dsl.builder.bindSelected
+import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.builder.toNullableProperty
 
@@ -40,6 +43,14 @@ private fun Row.makeWorkspaceFoldersInput(block: Cell<ComboBox<WorkspaceFolders>
     }
     
     comboBox(WorkspaceFolders.entries, renderer).apply(block)
+}
+
+
+private fun Row.makeTargetedFileExtensionsInput(block: Cell<ExpandableTextField>.() -> Unit) = run {
+    val parser = DelimitedFileExtensionList::split
+    val joiner = List<FileExtension>::join
+    
+    expandableTextField(parser, joiner).asSecondColumnInput().apply(block)
 }
 
 
@@ -66,6 +77,14 @@ internal fun Configurable.configurationPanel(state: Configurations) = panel {
     
     @Suppress("DialogTitleCapitalization")
     group(message("configurations.group.languageServer")) {
+        row(message("configurations.targetedFileExtensions.label")) {
+            makeTargetedFileExtensionsInput {
+                bindText(
+                    { state.targetedFileExtensions.orEmpty().deduplicate() },
+                    { state.targetedFileExtensions = it.deduplicate() }
+                )
+            }
+        }
         row(message("configurations.workspaceFolders.label")) {
             makeWorkspaceFoldersInput { bindItem(state::workspaceFolders.toNullableProperty()) }
         }

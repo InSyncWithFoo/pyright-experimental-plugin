@@ -50,7 +50,8 @@ internal class PyrightLSDescriptor(project: Project, private val executable: Pat
         LOGGER.info(configurations.toString())
     }
     
-    override fun isSupportedFile(file: VirtualFile) = file.isSupported
+    override fun isSupportedFile(file: VirtualFile) =
+        file.extension in configurations.targetedFileExtensionList
     
     override fun createCommandLine() =
         GeneralCommandLine(executable.toString(), "--stdio").apply {

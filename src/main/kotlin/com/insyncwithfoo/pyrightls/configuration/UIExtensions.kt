@@ -30,13 +30,16 @@ internal fun <T : JComponent> Cell<T>.ensureComment() = this.apply {
 }
 
 
-internal fun Row.secondColumnPathInput() = textFieldWithBrowseButton().apply {
+internal fun <T : JComponent> Cell<T>.asSecondColumnInput() = this.apply {
     ensureComment()
     
     gap(RightGap.SMALL)
     align(AlignX.FILL)
     resizableColumn()
 }
+
+
+internal fun Row.secondColumnPathInput() = textFieldWithBrowseButton().asSecondColumnInput()
 
 
 internal fun <T : TextFieldWithBrowseButton> Cell<T>.bindText(property: KMutableProperty0<String?>) =
