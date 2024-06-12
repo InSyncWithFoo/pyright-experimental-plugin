@@ -2,16 +2,33 @@ package com.insyncwithfoo.pyrightls
 
 import com.insyncwithfoo.pyrightls.configuration.AllConfigurations
 import com.insyncwithfoo.pyrightls.configuration.ConfigurationService
+import com.intellij.execution.wsl.WSLDistribution
+import com.intellij.execution.wsl.target.WslTargetEnvironmentConfiguration
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.projectRoots.Sdk
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.profile.codeInspection.InspectionProjectProfileManager
+import com.jetbrains.python.target.PyTargetAwareAdditionalData
 import java.nio.file.Path
 import kotlin.io.path.listDirectoryEntries
 
 
+private fun WSLDistribution.getWindowsPath(path: Path?) =
+    path?.toString()?.let { getWindowsPath(it) }
+
+
 private val Project.sdk: Sdk?
     get() = ProjectRootManager.getInstance(this).projectSdk
+
+
+private val Project.wslDistribution: WSLDistribution?
+    get() {
+        val sdk = this.sdk ?: return null
+        val additionalData = sdk.sdkAdditionalData as? PyTargetAwareAdditionalData ?: return null
+        val configuration = additionalData.targetEnvironmentConfiguration as? WslTargetEnvironmentConfiguration
+        
+        return configuration?.distribution
+    }
 
 
 internal val Project.path: Path?
@@ -28,6 +45,17 @@ internal val Project.isNormal: Boolean
 
 internal val Project.pyrightLSConfigurations: AllConfigurations
     get() = ConfigurationService.getInstance(this).state
+
+
+internal val Project.pyrightLSExecutable: Path?
+    get() {
+        val asGiven = pyrightLSConfigurations.executable?.toPathIfItExists(base = this.path)
+        
+        return when (val wslDistribution = wslDistribution) {
+            null -> asGiven
+            else -> wslDistribution.getWindowsPath(asGiven)?.toPathIfItExists()
+        }
+    }
 
 
 internal fun Project.isPyrightLSInspectionEnabled(): Boolean {
