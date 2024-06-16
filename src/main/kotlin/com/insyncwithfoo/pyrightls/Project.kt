@@ -13,15 +13,11 @@ import java.nio.file.Path
 import kotlin.io.path.listDirectoryEntries
 
 
-private fun WSLDistribution.getWindowsPath(path: Path?) =
-    path?.toString()?.let { getWindowsPath(it) }
-
-
 private val Project.sdk: Sdk?
     get() = ProjectRootManager.getInstance(this).projectSdk
 
 
-private val Project.wslDistribution: WSLDistribution?
+internal val Project.wslDistribution: WSLDistribution?
     get() {
         val sdk = this.sdk ?: return null
         val additionalData = sdk.sdkAdditionalData as? PyTargetAwareAdditionalData ?: return null
@@ -48,14 +44,7 @@ internal val Project.pyrightLSConfigurations: AllConfigurations
 
 
 internal val Project.pyrightLSExecutable: Path?
-    get() {
-        val asGiven = pyrightLSConfigurations.executable?.toPathIfItExists(base = this.path)
-        
-        return when (val wslDistribution = wslDistribution) {
-            null -> asGiven
-            else -> wslDistribution.getWindowsPath(asGiven)?.toPathIfItExists()
-        }
-    }
+    get() = pyrightLSConfigurations.executable?.toPathIfItExists(base = this.path)
 
 
 internal fun Project.isPyrightLSInspectionEnabled(): Boolean {

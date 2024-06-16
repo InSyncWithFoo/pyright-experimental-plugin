@@ -5,7 +5,11 @@ import com.insyncwithfoo.pyrightls.message
 import com.insyncwithfoo.pyrightls.path
 import com.insyncwithfoo.pyrightls.pyrightLSConfigurations
 import com.insyncwithfoo.pyrightls.server.diagnostics.DiagnosticsSupport
+import com.insyncwithfoo.pyrightls.wslDistribution
 import com.intellij.execution.configurations.GeneralCommandLine
+import com.intellij.execution.wsl.WSLCommandLineOptions
+import com.intellij.execution.wsl.WSLDistribution
+import com.intellij.execution.wsl.WslPath
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.BaseProjectDirectories.Companion.getBaseDirectories
 import com.intellij.openapi.project.Project
@@ -14,6 +18,18 @@ import com.intellij.openapi.roots.ModuleRootManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.platform.lsp.api.LspServerDescriptor
 import java.nio.file.Path
+
+
+private val Path.isUncPath: Boolean
+    get() = WslPath.parseWindowsUncPath(this.toString()) != null
+
+
+private fun String.monkeypatchInvalidWslPrefix() =
+    this.replace("""^file:////wsl\$""".toRegex(), "file://wsl.localhost")
+
+
+private fun String.undoWslPrefixMonkeypatch() =
+    this.replace("""^file://wsl\.localhost""".toRegex(), "file:////wsl\\$")
 
 
 private fun Project.getModuleSourceRoots(): Collection<VirtualFile> =
@@ -53,11 +69,46 @@ internal class PyrightLSDescriptor(project: Project, private val executable: Pat
     override fun isSupportedFile(file: VirtualFile) =
         file.extension in configurations.targetedFileExtensionList
     
-    override fun createCommandLine() =
-        GeneralCommandLine(executable.toString(), "--stdio").apply {
-            withWorkDirectory(project.path?.toString())
-            withCharset(Charsets.UTF_8)
+    override fun createInitializeParams() = super.createInitializeParams().apply {
+        val wslDistribution = project.wslDistribution
+        
+        @Suppress("DEPRECATION")
+        if (wslDistribution != null) {
+            rootUri = rootUri.monkeypatchInvalidWslPrefix()
+            rootPath = rootPath.monkeypatchInvalidWslPrefix()
         }
+    }
+    
+    override fun getFileUri(file: VirtualFile): String {
+        return super.getFileUri(file).monkeypatchInvalidWslPrefix()
+    }
+    
+    override fun findFileByUri(fileUri: String): VirtualFile? {
+        return super.findFileByUri(fileUri.undoWslPrefixMonkeypatch())
+    }
+    
+    override fun createCommandLine() = GeneralCommandLine().apply {
+        val wslDistribution = project.wslDistribution
+        val projectPath = project.path
+        val exePath = wslDistribution.getPureLinuxOrWindowsPath(executable)
+        
+        withExePath(exePath)
+        addParameter("--stdio")
+        
+        withCharset(Charsets.UTF_8)
+        withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.CONSOLE)
+        
+        if (projectPath != null) {
+            withWorkDirectory(projectPath.toString())
+        }
+        
+        wslDistribution?.patchCommandLine(this, project, WSLCommandLineOptions())
+    }
+    
+    private fun WSLDistribution?.getPureLinuxOrWindowsPath(path: Path) = when {
+        this != null && path.isUncPath -> this.getWslPath(path)!!
+        else -> path.toString()
+    }
     
     companion object {
         val PRESENTABLE_NAME = message("languageServer.representableName")

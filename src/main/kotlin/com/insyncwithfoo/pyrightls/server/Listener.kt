@@ -2,6 +2,7 @@ package com.insyncwithfoo.pyrightls.server
 
 import com.insyncwithfoo.pyrightls.pyrightLSConfigurations
 import com.insyncwithfoo.pyrightls.sdkPath
+import com.insyncwithfoo.pyrightls.wslDistribution
 import com.intellij.openapi.project.Project
 import com.intellij.platform.lsp.api.LspServerListener
 import com.intellij.platform.lsp.api.LspServerManager
@@ -9,11 +10,23 @@ import org.eclipse.lsp4j.DidChangeConfigurationParams
 import org.eclipse.lsp4j.InitializeResult
 
 
+private val Project.osDependentInterpreterPath: String?
+    get() {
+        val interpreterPath = sdkPath?.toString()
+        val wslDistribution = wslDistribution
+        
+        return when (wslDistribution) {
+            null -> interpreterPath
+            else -> interpreterPath?.replace("\\", "/")
+        }
+    }
+
+
 private fun Project.createPyrightLSSettingsObject() = Settings().apply {
     val configurations = pyrightLSConfigurations
     
     python.apply {
-        pythonPath = sdkPath?.toString()
+        pythonPath = osDependentInterpreterPath
         
         analysis.apply {
             logLevel = configurations.logLevel.label
