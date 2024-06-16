@@ -15,8 +15,10 @@ import com.intellij.openapi.project.BaseProjectDirectories.Companion.getBaseDire
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.modules
 import com.intellij.openapi.roots.ModuleRootManager
+import com.intellij.openapi.util.io.OSAgnosticPathUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.platform.lsp.api.LspServerDescriptor
+import java.net.URI
 import java.nio.file.Path
 
 
@@ -24,12 +26,8 @@ private val Path.isUncPath: Boolean
     get() = WslPath.parseWindowsUncPath(this.toString()) != null
 
 
-private fun String.monkeypatchInvalidWslPrefix() =
-    this.replace("""^file:////wsl\$""".toRegex(), "file://wsl.localhost")
-
-
-private fun String.undoWslPrefixMonkeypatch() =
-    this.replace("""^file://wsl\.localhost""".toRegex(), "file:////wsl\\$")
+private val URI.pathIsAbsolute: Boolean
+    get() = OSAgnosticPathUtil.isAbsoluteDosPath(Path.of(this).toString())
 
 
 private fun Project.getModuleSourceRoots(): Collection<VirtualFile> =
@@ -74,17 +72,33 @@ internal class PyrightLSDescriptor(project: Project, private val executable: Pat
         
         @Suppress("DEPRECATION")
         if (wslDistribution != null) {
-            rootUri = rootUri.monkeypatchInvalidWslPrefix()
-            rootPath = rootPath.monkeypatchInvalidWslPrefix()
+            rootUri = null
+            rootPath = null
         }
     }
     
     override fun getFileUri(file: VirtualFile): String {
-        return super.getFileUri(file).monkeypatchInvalidWslPrefix()
+        val wslDistribution = project.wslDistribution
+        val possiblyUncPath = Path.of(file.path)
+        
+        return when {
+            wslDistribution == null -> possiblyUncPath.toUri().toString()
+            else -> wslDistribution.getWslPath(possiblyUncPath)!!
+        }
     }
     
-    override fun findFileByUri(fileUri: String): VirtualFile? {
-        return super.findFileByUri(fileUri.undoWslPrefixMonkeypatch())
+    override fun findFileByUri(fileUri: String) =
+        findFileByUri(URI.create(fileUri))
+    
+    private fun findFileByUri(fileUri: URI): VirtualFile? {
+        val wslDistribution = project.wslDistribution
+        
+        val virtualFileUri = when {
+            wslDistribution == null || fileUri.pathIsAbsolute -> fileUri
+            else -> Path.of(wslDistribution.getWindowsPath(fileUri.path)).toUri()
+        }
+        
+        return super.findFileByUri(virtualFileUri.toString())
     }
     
     override fun createCommandLine() = GeneralCommandLine().apply {
