@@ -79,11 +79,10 @@ internal class PyrightLSDescriptor(project: Project, private val executable: Pat
     
     override fun getFileUri(file: VirtualFile): String {
         val wslDistribution = project.wslDistribution
-        val possiblyUncPath = Path.of(file.path)
         
         return when {
-            wslDistribution == null -> possiblyUncPath.toUri().toString()
-            else -> wslDistribution.getWslPath(possiblyUncPath)!!
+            wslDistribution == null -> super.getFileUri(file)
+            else -> wslDistribution.getWslPath(Path.of(file.path))!!
         }
     }
     
