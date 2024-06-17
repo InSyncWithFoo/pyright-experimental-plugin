@@ -22,11 +22,17 @@ import java.net.URI
 import java.nio.file.Path
 
 
+private fun makeFileUri(path: String): String {
+    val (scheme, host, fragment) = Triple("file", "", null)
+    return URI(scheme, host, path, fragment).toASCIIString()
+}
+
+
 private val Path.isUncPath: Boolean
     get() = WslPath.parseWindowsUncPath(this.toString()) != null
 
 
-private val URI.pathIsAbsolute: Boolean
+private val URI.pathIsAbsoluteDos: Boolean
     get() = OSAgnosticPathUtil.isAbsoluteDosPath(Path.of(this).toString())
 
 
@@ -67,22 +73,12 @@ internal class PyrightLSDescriptor(project: Project, private val executable: Pat
     override fun isSupportedFile(file: VirtualFile) =
         file.extension in configurations.targetedFileExtensionList
     
-    override fun createInitializeParams() = super.createInitializeParams().apply {
-        val wslDistribution = project.wslDistribution
-        
-        @Suppress("DEPRECATION")
-        if (wslDistribution != null) {
-            rootUri = null
-            rootPath = null
-        }
-    }
-    
     override fun getFileUri(file: VirtualFile): String {
         val wslDistribution = project.wslDistribution
         
         return when {
             wslDistribution == null -> super.getFileUri(file)
-            else -> wslDistribution.getWslPath(Path.of(file.path))!!
+            else -> makeFileUri(wslDistribution.getWslPath(Path.of(file.path))!!)
         }
     }
     
@@ -93,7 +89,7 @@ internal class PyrightLSDescriptor(project: Project, private val executable: Pat
         val wslDistribution = project.wslDistribution
         
         val virtualFileUri = when {
-            wslDistribution == null || fileUri.pathIsAbsolute -> fileUri
+            wslDistribution == null || fileUri.pathIsAbsoluteDos -> fileUri
             else -> Path.of(wslDistribution.getWindowsPath(fileUri.path)).toUri()
         }
         
