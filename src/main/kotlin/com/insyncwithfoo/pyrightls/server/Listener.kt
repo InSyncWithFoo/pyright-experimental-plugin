@@ -13,7 +13,6 @@ import org.eclipse.lsp4j.InitializeResult
 private val Project.osDependentInterpreterPath: String?
     get() {
         val interpreterPath = sdkPath?.toString()
-        val wslDistribution = wslDistribution
         
         return when (wslDistribution) {
             null -> interpreterPath
