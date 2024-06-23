@@ -12,6 +12,11 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
 
 ## [Unreleased]
 
+<i>This section is currently empty.</i>
+
+
+## [1.0.0] - 2024-06-22
+
 ### Added
 
 * Project option "Targeted file extensions" is added. (d5c69dbb, 541c5630)
@@ -297,7 +302,8 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
 * Project initialized.
 
 
-  [Unreleased]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v0.5.0..HEAD
+  [Unreleased]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v1.0.0..HEAD
+  [1.0.0]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v0.5.0..v1.0.0
   [0.5.0]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v0.4.0..v0.5.0
   [0.4.0]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v0.3.0..v0.4.0
   [0.3.0]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v0.2.0..v0.3.0
