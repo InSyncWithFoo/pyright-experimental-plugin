@@ -8,11 +8,11 @@ import java.nio.file.Path
 import com.insyncwithfoo.pyrightls.configuration.project.Configurations as ProjectConfigurations
 
 
-private val Project.sdkIsLocal: Boolean
+private val Project.interpreterIsLocal: Boolean
     get() = when {
         path == null -> false
-        sdkPath == null -> false
-        else -> sdkPath!!.startsWith(path!!)
+        interpreterPath == null -> false
+        else -> interpreterPath!!.startsWith(path!!)
     }
 
 
@@ -48,7 +48,7 @@ private fun Project.disableSuggester() {
 internal class PyrightLSProjectExecutableSuggester : ProjectActivity {
     
     override suspend fun execute(project: Project) {
-        if (project.run { isPyrightLSInspectionEnabled() && executableShouldBeSuggested() && sdkIsLocal }) {
+        if (project.run { isPyrightLSInspectionEnabled() && executableShouldBeSuggested() && interpreterIsLocal }) {
             suggest(project, project.findPyrightLSExecutable() ?: return)
         }
     }
