@@ -1,6 +1,7 @@
 package com.insyncwithfoo.pyrightls.server
 
 import com.insyncwithfoo.pyrightls.configuration.project.WorkspaceFolders
+import com.insyncwithfoo.pyrightls.hasOnlyOneModule
 import com.insyncwithfoo.pyrightls.message
 import com.insyncwithfoo.pyrightls.path
 import com.insyncwithfoo.pyrightls.pyrightLSConfigurations
@@ -55,8 +56,8 @@ private fun Project.getWorkspaceFolders(): Collection<VirtualFile> =
 
 
 @Suppress("UnstableApiUsage")
-internal class PyrightLSDescriptor(project: Project, private val executable: Path, module: Module?) :
-    LspServerDescriptor(project, getPresentableName(module), *project.getWorkspaceFolders().toTypedArray()) {
+internal class PyrightLSDescriptor(project: Project, private val executable: Path, private val module: Module?) :
+    LspServerDescriptor(project, getPresentableName(project, module), *project.getWorkspaceFolders().toTypedArray()) {
     
     private val configurations = project.pyrightLSConfigurations
     
@@ -121,8 +122,8 @@ internal class PyrightLSDescriptor(project: Project, private val executable: Pat
         
         private val LOGGER = Logger.getInstance(PyrightLSDescriptor::class.java)
         
-        private fun getPresentableName(module: Module?): String = when (module) {
-            null -> message("languageServer.representableName.project")
+        private fun getPresentableName(project: Project, module: Module?) = when {
+            module == null || project.hasOnlyOneModule -> message("languageServer.representableName.project")
             else -> message("languageServer.representableName.module", module.name)
         }
         

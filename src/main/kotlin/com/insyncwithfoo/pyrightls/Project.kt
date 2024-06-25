@@ -3,12 +3,22 @@ package com.insyncwithfoo.pyrightls
 import com.insyncwithfoo.pyrightls.configuration.AllConfigurations
 import com.insyncwithfoo.pyrightls.configuration.ConfigurationService
 import com.intellij.execution.wsl.WSLDistribution
+import com.intellij.openapi.module.Module
+import com.intellij.openapi.module.ModuleManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.projectRoots.Sdk
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.profile.codeInspection.InspectionProjectProfileManager
 import java.nio.file.Path
 import kotlin.io.path.listDirectoryEntries
+
+
+private val <T> Array<T>.onlyElement: T?
+    get() = firstOrNull().takeIf { size == 1 }
+
+
+private val Project.modules: Array<Module>
+    get() = ModuleManager.getInstance(this).modules
 
 
 private val Project.sdk: Sdk?
@@ -29,6 +39,14 @@ internal val Project.interpreterPath: Path?
 
 internal val Project.isNormal: Boolean
     get() = !this.isDefault && !this.isDisposed
+
+
+internal val Project.onlyModuleOrNull: Module?
+    get() = modules.onlyElement
+
+
+internal val Project.hasOnlyOneModule: Boolean
+    get() = modules.size == 1
 
 
 internal val Project.pyrightLSConfigurations: AllConfigurations
