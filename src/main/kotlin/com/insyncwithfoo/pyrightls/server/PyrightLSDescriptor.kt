@@ -56,7 +56,7 @@ private fun Project.getWorkspaceFolders(): Collection<VirtualFile> =
 
 
 @Suppress("UnstableApiUsage")
-internal class PyrightLSDescriptor(project: Project, private val executable: Path, private val module: Module?) :
+internal class PyrightLSDescriptor(project: Project, module: Module?, private val executable: Path) :
     LspServerDescriptor(project, getPresentableName(project, module), *project.getWorkspaceFolders().toTypedArray()) {
     
     private val configurations = project.pyrightLSConfigurations

@@ -48,7 +48,7 @@ internal class PyrightLSSupportProvider : LspServerSupportProvider {
         
         if (fileIsSupported && project.pyrightLSInspectionIsEnabled) {
             val executable = project.pyrightLSExecutable ?: return
-            val descriptor = PyrightLSDescriptor(project, executable, psiFile.module)
+            val descriptor = PyrightLSDescriptor(project, psiFile.module, executable)
             
             serverStarter.ensureServerStarted(descriptor)
         }
