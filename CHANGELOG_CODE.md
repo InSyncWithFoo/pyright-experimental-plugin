@@ -14,19 +14,25 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
 
 ### Changed
 
-* [The Kover Gradle Plugin][101-1] is updated to 0.8.2. (a408736e)
-* Path-hints-related logic is revisited to use `PropertyGraph`. (HEAD)
+* [Kover Gradle Plugin][101-1] is updated to 0.8.2. (a408736e)
+* Path-hints-related logic is revisited to use `PropertyGraph`. (cde35259)
+* [Changelog Gradle Plugin][101-2] is updated to 2.2.1. (22b0f1c0)
+* [IntelliJ Platform Gradle Plugin][101-3] is updated to 2.0.0-beta9.
+  (5f1dcd8b)
+* Gradle is updated to 8.9. (HEAD)
 
 ### Fixed
 
-* `Project.sdkPath` is now [`.interpreterPath`][101-2]
-  and serves only as a fallback of [`Module.interpreterPath`][101-3].
+* `Project.sdkPath` is now [`.interpreterPath`][101-4]
+  and serves only as a fallback of [`Module.interpreterPath`][101-5].
   (6b9214fe)
 
 
   [101-1]: https://github.com/Kotlin/kotlinx-kover
-  [101-2]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/blob/6b9214fe/src/main/kotlin/com/insyncwithfoo/pyrightls/Project.kt
-  [101-3]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/blob/6b9214fe/src/main/kotlin/com/insyncwithfoo/pyrightls/Module.kt
+  [101-2]: https://github.com/JetBrains/gradle-changelog-plugin
+  [101-3]: https://github.com/JetBrains/intellij-platform-gradle-plugin
+  [101-4]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/blob/6b9214fe/src/main/kotlin/com/insyncwithfoo/pyrightls/Project.kt
+  [101-5]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/blob/6b9214fe/src/main/kotlin/com/insyncwithfoo/pyrightls/Module.kt
 
 
 ## [1.0.0] - 2024-06-23
@@ -43,8 +49,8 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
 
 * [`PyrightBundle`][100-1] and [`PyrightIcon`][100-2] are renamed. (81e35bb9)
 * Gradle is updated to 8.8. (81e35bb9)
-* [The Kover Gradle Plugin][100-3] is updated to 0.8.1. (8e758a00)
-* [The IntelliJ Platform Gradle Plugin][100-4] is updated to 2.0.0-beta7.
+* [Kover Gradle Plugin][100-3] is updated to 0.8.1. (8e758a00)
+* [IntelliJ Platform Gradle Plugin][100-4] is updated to 2.0.0-beta7.
   (b880c90f, 2e6d0d96)
 
 ### Fixed
@@ -70,8 +76,8 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
 
 ### Changed
 
-* [The Kover Gradle Plugin][50-1] is updated to 0.8.0. (8d034a20)
-* [The Qodana Gradle plugin][50-2] and its corresponding action
+* [Kover Gradle Plugin][50-1] is updated to 0.8.0. (8d034a20)
+* [Qodana Gradle Plugin][50-2] and its corresponding action
   [@JetBrains/qodana-action][50-3] are updated to 2024.1.5.
   (85c78a93)
 * Another conditional was added to
@@ -102,7 +108,7 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
 
 ### Changed
 
-* [The Qodana Gradle plugin][40-3] and its corresponding action
+* [Qodana Gradle Plugin][40-3] and its corresponding action
   [@JetBrains/qodana-action][40-4] are updated to 2024.1.4.
   (647bd2d5, 26a9fcf9, b952ef10, 1ae17a00, bed1cfe6, 6bd68dfd)
 * A new branch is added to [`executablePathResolvingHint()`][40-5]. (906f7abe)
@@ -260,9 +266,9 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
   (ca944192)
 
 * Plugin verifier results are now always uploaded. (ca944192)
-* [The Qodana Gradle plugin][3-4] and its corresponding action
+* [Qodana Gradle Plugin][3-4] and its corresponding action
   [@JetBrains/qodana-action][3-5] are updated to 2023.3.2. (474b797c)
-* [The IntelliJ Platform Gradle plugin][3-6] is updated to 1.17.3. (5546f8fa)
+* [IntelliJ Platform Gradle Plugin][3-6] is updated to 1.17.3. (5546f8fa)
 * UI-related code is rewritten to use [Kotlin UI DSL][3-7]. (a31ced27)
 * All APIs are now either internal or private.
   * Some of them no longer have the prefix `PyrightLS` in their names.
