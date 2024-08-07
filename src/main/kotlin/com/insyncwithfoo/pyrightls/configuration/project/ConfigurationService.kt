@@ -8,7 +8,10 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 
 
-@State(name = "ProjectConfigurations", storages = [Storage("pyright-langserver.xml")])
+@State(
+    name = "com.insyncwithfoo.pyrightls.configuration.project.ConfigurationService",
+    storages = [Storage("pyright-langserver.xml")]
+)
 @Service(Service.Level.PROJECT)
 internal class ConfigurationService : SimplePersistentStateComponent<Configurations>(Configurations()) {
     companion object {

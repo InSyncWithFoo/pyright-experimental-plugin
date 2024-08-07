@@ -51,7 +51,7 @@ internal fun Row.reactiveLabel(property: ObservableMutableProperty<String>) =
     comment("").bindText(property)
 
 
-internal class ExecutablePathHintState(private val makeValidPathHint: (Path) -> Hint) {
+internal class PathHintState(private val makeValidPathHint: (Path) -> Hint) {
     
     private val propertyGraph = PropertyGraph()
     

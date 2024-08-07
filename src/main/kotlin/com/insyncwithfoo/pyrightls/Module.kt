@@ -23,8 +23,8 @@ internal val Sdk.wslDistribution: WSLDistribution?
 
 
 internal val Module.interpreterPath: Path?
-    get() = sdk?.homePath?.let { Path.of(it) } ?: project.interpreterPath
+    get() = sdk?.homePath?.toPathOrNull() ?: project.interpreterPath
 
 
 internal val Module.wslDistribution: WSLDistribution?
-    get() = sdk?.wslDistribution
+    get() = sdk?.wslDistribution ?: project.wslDistribution

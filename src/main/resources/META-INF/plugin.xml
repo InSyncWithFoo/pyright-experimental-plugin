@@ -32,15 +32,27 @@
 			id="Pyright LS notifications"
 		/>
 		
+		<groupConfigurable
+			id="com.insyncwithfoo.pyrightls.configuration"
+			parentId="tools"
+			bundle="messages.pyrightls"
+			displayNameKey="configurations.parent.displayName"
+			descriptionKey="configurations.parent.description"
+		/>
+		
 		<applicationConfigurable
-			groupId="tools"
-			displayName="Pyright LS (Global)"
+			id="com.insyncwithfoo.pyrightls.configuration.application"
+			parentId="com.insyncwithfoo.pyrightls.configuration"
+			bundle="messages.pyrightls"
+			key="configurations.global.displayName"
 			instance="com.insyncwithfoo.pyrightls.configuration.application.Configurable"
 		/>
 		
 		<projectConfigurable
-			groupId="tools"
-			displayName="Pyright LS (Project)"
+			id="com.insyncwithfoo.pyrightls.configuration.project"
+			parentId="com.insyncwithfoo.pyrightls.configuration"
+			bundle="messages.pyrightls"
+			key="configurations.project.displayName"
 			instance="com.insyncwithfoo.pyrightls.configuration.project.Configurable"
 		/>
 		
@@ -67,5 +79,21 @@
 		<postStartupActivity
 			implementation="com.insyncwithfoo.pyrightls.PyrightLSProjectExecutableSuggester"
 		/>
+		
+		<postStartupActivity
+			order="first"
+			implementation="com.insyncwithfoo.pyrightls.configuration.converter.ConfigurationsConverter"
+		/>
+		
+		<fileIconProvider
+			implementation="com.insyncwithfoo.pyrightls.icons.PyrightConfigFileIconProvider"
+		/>
 	</extensions>
+	
+	<applicationListeners>
+		<listener
+			topic="com.intellij.ide.AppLifecycleListener"
+			class="com.insyncwithfoo.pyrightls.configuration.converter.ConfigurationsConverter"
+		/>
+	</applicationListeners>
 </idea-plugin>

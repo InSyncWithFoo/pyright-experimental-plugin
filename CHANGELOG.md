@@ -11,6 +11,13 @@ For code changes, see [`CHANGELOG_CODE.md`][_-1].
 
 ## [Unreleased]
 
+### Added
+
+* The icon for `pyrightconfig.json` is now replaced with Pyright's logo.
+
+
+## [1.0.1] - 2024-07-14
+
 ### Fixed
 
 * The active interpreter is now detected correcly on non-PyCharm IDEs.
@@ -175,7 +182,8 @@ For code changes, see [`CHANGELOG_CODE.md`][_-1].
 * Project initialized.
 
 
-  [Unreleased]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v1.0.0..HEAD
+  [Unreleased]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v1.0.1..HEAD
+  [1.0.1]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v1.0.0..v1.0.1
   [1.0.0]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v0.5.0..v1.0.0
   [0.5.0]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v0.4.0..v0.5.0
   [0.4.0]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v0.3.0..v0.4.0

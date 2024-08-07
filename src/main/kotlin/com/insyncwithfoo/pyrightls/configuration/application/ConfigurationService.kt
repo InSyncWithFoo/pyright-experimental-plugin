@@ -9,7 +9,7 @@ import com.intellij.openapi.components.service
 
 
 @State(
-    name = "ApplicationConfigurations",
+    name = "com.insyncwithfoo.pyrightls.configuration.application.ConfigurationService",
     storages = [Storage("pyright-langserver.xml", roamingType = RoamingType.LOCAL)]
 )
 @Service(Service.Level.APP)

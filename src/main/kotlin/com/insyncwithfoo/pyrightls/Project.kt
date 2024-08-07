@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.projectRoots.Sdk
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.profile.codeInspection.InspectionProjectProfileManager
+import com.jetbrains.python.sdk.PythonSdkUtil
 import java.nio.file.Path
 import kotlin.io.path.listDirectoryEntries
 
@@ -23,6 +24,7 @@ private val Project.modules: Array<Module>
 
 private val Project.sdk: Sdk?
     get() = ProjectRootManager.getInstance(this).projectSdk
+        ?.takeIf { PythonSdkUtil.isPythonSdk(it) }
 
 
 internal val Project.wslDistribution: WSLDistribution?

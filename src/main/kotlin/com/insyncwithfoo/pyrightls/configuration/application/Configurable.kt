@@ -1,6 +1,7 @@
 package com.insyncwithfoo.pyrightls.configuration.application
 
 import com.insyncwithfoo.pyrightls.configuration.PyrightLSConfigurable
+import com.insyncwithfoo.pyrightls.configuration.copy
 import com.insyncwithfoo.pyrightls.isNormal
 import com.insyncwithfoo.pyrightls.message
 import com.intellij.openapi.project.Project

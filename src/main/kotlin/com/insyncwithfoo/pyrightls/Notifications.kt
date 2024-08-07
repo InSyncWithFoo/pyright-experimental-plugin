@@ -1,5 +1,6 @@
 package com.insyncwithfoo.pyrightls
 
+import com.insyncwithfoo.pyrightls.icons.Icon
 import com.intellij.notification.Notification
 import com.intellij.notification.NotificationAction.createSimpleExpiring
 import com.intellij.notification.NotificationGroup

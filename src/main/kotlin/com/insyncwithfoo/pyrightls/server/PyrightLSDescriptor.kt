@@ -68,7 +68,7 @@ internal class PyrightLSDescriptor(project: Project, module: Module?, private va
     override val lspCompletionSupport = CompletionSupport(project).takeIf { configurations.completionSupport }
     override val lspDiagnosticsSupport = DiagnosticsSupport(project).takeIf { configurations.diagnosticsSupport }
     
-    private val wslDistribution by lazy { module?.wslDistribution ?: project.wslDistribution }
+    private val wslDistribution by lazy { module?.wslDistribution }
     
     init {
         LOGGER.info(configurations.toString())

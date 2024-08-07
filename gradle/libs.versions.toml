@@ -1,12 +1,13 @@
 [versions]
 # libraries
 annotations = "24.1.0"
+junit = "4.13.2"
 
 # plugins
 changelog = "2.2.1"
-intellijPlatform = "2.0.0-beta9"
+intelliJPlatform = "2.0.0"
 kotlin = "2.0.0"
-kover = "0.8.2"
+kover = "0.8.3"
 qodana = "2024.1.9"
 
 [libraries.annotations]
@@ -14,13 +15,18 @@ group = "org.jetbrains"
 name = "annotations"
 version.ref = "annotations"
 
+[libraries.junit]
+group = "junit"
+name = "junit"
+version.ref = "junit"
+
 [plugins.changelog]
 id = "org.jetbrains.changelog"
 version.ref = "changelog"
 
-[plugins.intellijPlatform]
+[plugins.intelliJPlatform]
 id = "org.jetbrains.intellij.platform"
-version.ref = "intellijPlatform"
+version.ref = "intelliJPlatform"
 
 [plugins.kotlin]
 id = "org.jetbrains.kotlin.jvm"

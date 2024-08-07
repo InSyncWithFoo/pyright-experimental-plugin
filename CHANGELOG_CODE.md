@@ -2,7 +2,6 @@
 
 # Code changelog
 
-
 This page documents code changes.
 For user-facing changes, see [`CHANGELOG.md`][_-1].
 
@@ -12,6 +11,25 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
 
 ## [Unreleased]
 
+### Added
+
+* Documentation for this plugin now has [its own site][110-1]. (3d2f0d9f)
+* The [`icons`][110-2] subpackage is added. (e42eba4e)
+
+### Changed
+
+* [IntelliJ Platform Gradle Plugin][110-3] is updated to 2.0.0.
+  (d019e093, c1a82370, HEAD)
+* [Kover Gradle Plugin][110-4] is updated to 0.8.3. (776cb74a)
+
+  [110-1]: https://insyncwithfoo.github.io/pyright-langserver-for-pycharm
+  [110-2]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/blob/e42eba4e/src/main/kotlin/com/insyncwithfoo/pyrightls/icons
+  [110-3]: https://github.com/JetBrains/intellij-platform-gradle-plugin
+  [110-4]: https://github.com/Kotlin/kotlinx-koverhttps://github.com/Kotlin/kotlinx-kover
+
+
+## [1.0.1] - 2024-07-14
+
 ### Changed
 
 * [Kover Gradle Plugin][101-1] is updated to 0.8.2. (a408736e)
@@ -19,7 +37,7 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
 * [Changelog Gradle Plugin][101-2] is updated to 2.2.1. (22b0f1c0)
 * [IntelliJ Platform Gradle Plugin][101-3] is updated to 2.0.0-beta9.
   (5f1dcd8b)
-* Gradle is updated to 8.9. (HEAD)
+* Gradle is updated to 8.9. (a6c2a66f)
 
 ### Fixed
 
@@ -104,7 +122,7 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
 * [`PyrightLSDescriptor`][40-1] now logs all configurations on initialization.
   (501b9cea)
 * Diagnostics-related construct, including those newly added for quick fixes,
-  are moved to the [`.diagnostics`][40-2] module. (a95bea0f)
+  are moved to the [`diagnostics`][40-2] subpackage. (a95bea0f)
 
 ### Changed
 
@@ -277,7 +295,7 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
 
 ### Changed
 
-* The `configuration.common` module is removed
+* The `configuration.common` subpackage is removed
   in favor of [`PyrightLSConfigurable.kt`][3-8]. (a31ced27)
 
 
@@ -322,7 +340,8 @@ For user-facing changes, see [`CHANGELOG.md`][_-1].
 * Project initialized.
 
 
-  [Unreleased]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v1.0.0..HEAD
+  [Unreleased]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v1.0.1..HEAD
+  [1.0.1]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v1.0.0..v1.0.1
   [1.0.0]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v0.5.0..v1.0.0
   [0.5.0]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v0.4.0..v0.5.0
   [0.4.0]: https://github.com/InSyncWithFoo/pyright-langserver-for-pycharm/compare/v0.3.0..v0.4.0

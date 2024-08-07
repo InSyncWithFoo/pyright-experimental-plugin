@@ -1,7 +1,7 @@
 package com.insyncwithfoo.pyrightls.configuration.project
 
-import com.insyncwithfoo.pyrightls.configuration.ExecutablePathHintState
 import com.insyncwithfoo.pyrightls.configuration.Hint
+import com.insyncwithfoo.pyrightls.configuration.PathHintState
 import com.insyncwithfoo.pyrightls.configuration.executablePathResolvingHint
 import com.insyncwithfoo.pyrightls.configuration.makeFlexible
 import com.insyncwithfoo.pyrightls.configuration.reactiveLabel
@@ -24,8 +24,8 @@ import com.intellij.ui.dsl.builder.toNonNullableProperty
 import com.intellij.ui.dsl.builder.toNullableProperty
 
 
-private fun unresolvablePathHint() =
-    Hint.error(message("configurations.hint.unresolvablePath"))
+private val unresolvablePathHint: Hint
+    get() = Hint.error(message("configurations.hint.unresolvablePath"))
 
 
 private fun Row.makeProjectExecutableInput(block: Cell<TextFieldWithBrowseButton>.() -> Unit) =
@@ -67,9 +67,9 @@ private fun Row.makeAutoSearchPathsInput(block: Cell<JBCheckBox>.() -> Unit) =
 
 
 internal fun Configurable.configurationPanel(state: Configurations) = panel {
-    val executablePathHintState = ExecutablePathHintState { path ->
+    val executablePathHintState = PathHintState { path ->
         when {
-            project.path == null && !path.isAbsolute -> unresolvablePathHint()
+            project.path == null && !path.isAbsolute -> unresolvablePathHint
             else -> executablePathResolvingHint(path.resolvedAgainst(project.path))
         }
     }

@@ -1,7 +1,7 @@
 package com.insyncwithfoo.pyrightls.configuration.application
 
-import com.insyncwithfoo.pyrightls.configuration.ExecutablePathHintState
 import com.insyncwithfoo.pyrightls.configuration.Hint
+import com.insyncwithfoo.pyrightls.configuration.PathHintState
 import com.insyncwithfoo.pyrightls.configuration.executablePathResolvingHint
 import com.insyncwithfoo.pyrightls.configuration.makeFlexible
 import com.insyncwithfoo.pyrightls.configuration.reactiveLabel
@@ -22,8 +22,8 @@ import com.intellij.ui.dsl.builder.toNonNullableProperty
 import com.intellij.ui.dsl.builder.toNullableProperty
 
 
-private fun relativePathHint() =
-    Hint.error(message("configurations.hint.globalMustBeAbsolute"))
+private val relativePathHint: Hint
+    get() = Hint.error(message("configurations.hint.globalMustBeAbsolute"))
 
 
 private fun Row.makeAlwaysUseGlobalInput(block: Cell<JBCheckBox>.() -> Unit) =
@@ -102,9 +102,9 @@ private fun Row.makeMonkeypatchTrailingQuoteBugInput(block: Cell<JBCheckBox>.() 
 
 @Suppress("DialogTitleCapitalization")
 internal fun configurationPanel(state: Configurations) = panel {
-    val executablePathHintState = ExecutablePathHintState { path ->
+    val executablePathHintState = PathHintState { path ->
         when {
-            !path.isAbsolute -> relativePathHint()
+            !path.isAbsolute -> relativePathHint
             else -> executablePathResolvingHint(path)
         }
     }

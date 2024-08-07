@@ -17,6 +17,11 @@ private val Project.lspServerManager: LspServerManager
     get() = LspServerManager.getInstance(this)
 
 
+internal fun <T : BaseState> T.copy(): T {
+    return XmlSerializerUtil.createCopy(this)
+}
+
+
 internal abstract class PyrightLSConfigurable<State : BaseState> : Configurable {
     
     protected abstract val service: SimplePersistentStateComponent<State>
@@ -35,10 +40,6 @@ internal abstract class PyrightLSConfigurable<State : BaseState> : Configurable 
     
     override fun reset() {
         panel.reset()
-    }
-    
-    protected fun State.copy(): State {
-        return XmlSerializerUtil.createCopy(this)
     }
     
     @Suppress("UnstableApiUsage")

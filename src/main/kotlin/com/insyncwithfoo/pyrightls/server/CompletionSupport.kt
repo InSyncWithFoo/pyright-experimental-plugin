@@ -67,7 +67,7 @@ private fun CompletionItem.completeWithParentheses() {
     
     insertTextFormat = InsertTextFormat.Snippet
     
-    when (val textEdit = textEdit?.get()) {
+    when (val textEdit = this.textEdit?.get()) {
         null -> insertText = newInsertText
         is TextEdit -> textEdit.newText = newInsertText
         // InsertReplaceEdit must not be messed with.
