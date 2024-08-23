@@ -1,5 +1,6 @@
 package com.insyncwithfoo.pyrightls.server
 
+import com.insyncwithfoo.pyrightls.configuration.application.Locale
 import com.insyncwithfoo.pyrightls.configuration.project.WorkspaceFolders
 import com.insyncwithfoo.pyrightls.hasOnlyOneModule
 import com.insyncwithfoo.pyrightls.message
@@ -108,6 +109,10 @@ internal class PyrightLSDescriptor(project: Project, module: Module?, private va
         
         if (projectPath != null) {
             withWorkDirectory(projectPath.toString())
+        }
+        
+        if (configurations.locale != Locale.DEFAULT) {
+            withEnvironment("LC_ALL", configurations.locale.toString())
         }
         
         wslDistribution?.patchCommandLine(this, project, WSLCommandLineOptions())

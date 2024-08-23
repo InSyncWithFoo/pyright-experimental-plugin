@@ -100,6 +100,15 @@ private fun Row.makeMonkeypatchTrailingQuoteBugInput(block: Cell<JBCheckBox>.() 
 }
 
 
+private fun Row.makeLocaleInput(block: Cell<ComboBox<Locale>>.() -> Unit) = run {
+    val renderer = SimpleListCellRenderer.create<Locale> { label, value, _ ->
+        label.text = value.toString()
+    }
+    
+    comboBox(Locale.entries, renderer).apply(block)
+}
+
+
 @Suppress("DialogTitleCapitalization")
 internal fun configurationPanel(state: Configurations) = panel {
     val executablePathHintState = PathHintState { path ->
@@ -133,6 +142,9 @@ internal fun configurationPanel(state: Configurations) = panel {
         }
         row {
             makeLinkErrorCodesInput { bindSelected(state::linkErrorCodes) }
+        }
+        row(message("configurations.locale.label")) {
+            makeLocaleInput { bindItem(state::locale.toNullableProperty()) }
         }
     }
     

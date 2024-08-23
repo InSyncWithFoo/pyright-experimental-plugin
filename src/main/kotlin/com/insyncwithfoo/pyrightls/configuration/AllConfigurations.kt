@@ -1,6 +1,7 @@
 package com.insyncwithfoo.pyrightls.configuration
 
 import com.insyncwithfoo.pyrightls.configuration.application.LogLevel
+import com.insyncwithfoo.pyrightls.configuration.application.Locale
 import com.insyncwithfoo.pyrightls.configuration.project.DelimitedFileExtensionList
 import com.insyncwithfoo.pyrightls.configuration.project.DiagnosticMode
 import com.insyncwithfoo.pyrightls.configuration.project.FileExtension
@@ -29,6 +30,7 @@ internal infix fun ApplicationConfigurations.mergeWith(other: ProjectConfigurati
         autoRestartServer = this.autoRestartServer,
         monkeypatchAutoImportDetails = this.monkeypatchAutoImportDetails,
         monkeypatchTrailingQuoteBug = this.monkeypatchTrailingQuoteBug,
+        locale = this.locale,
         
         projectExecutable = other.projectExecutable,
         autoSuggestExecutable = other.autoSuggestExecutable,
@@ -56,6 +58,7 @@ internal data class AllConfigurations(
     val autoRestartServer: Boolean,
     val monkeypatchAutoImportDetails: Boolean,
     val monkeypatchTrailingQuoteBug: Boolean,
+    val locale: Locale,
     
     val projectExecutable: @SystemDependent String?,
     val autoSuggestExecutable: Boolean,

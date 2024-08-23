@@ -1,5 +1,6 @@
 package com.insyncwithfoo.pyrightls.configuration
 
+import com.insyncwithfoo.pyrightls.configuration.application.Locale
 import com.insyncwithfoo.pyrightls.configuration.application.LogLevel
 import com.insyncwithfoo.pyrightls.configuration.project.DiagnosticMode
 import com.insyncwithfoo.pyrightls.configuration.project.WorkspaceFolders
@@ -25,7 +26,7 @@ class ConfigurationFieldsTest : TestCase() {
     fun `test defaults - application`() {
         val configurations = ApplicationConfigurations()
         
-        assertEquals(16, applicationFields().size)
+        assertEquals(17, applicationFields().size)
         
         configurations.run {
             assertEquals(false, alwaysUseGlobal)
@@ -44,6 +45,7 @@ class ConfigurationFieldsTest : TestCase() {
             assertEquals(false, autoRestartServer)
             assertEquals(true, monkeypatchAutoImportDetails)
             assertEquals(true, monkeypatchTrailingQuoteBug)
+            assertEquals(Locale.DEFAULT, locale)
         }
     }
     

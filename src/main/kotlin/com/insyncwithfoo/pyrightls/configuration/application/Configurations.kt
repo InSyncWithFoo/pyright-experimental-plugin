@@ -12,6 +12,27 @@ internal enum class LogLevel(val label: String) {
 }
 
 
+internal enum class Locale(private val value: String) {
+    DEFAULT(message("configurations.locale.default")),
+    CS("cs"),
+    DE("de"),
+    EN_US("en-us"),
+    ES("es"),
+    FR("fr"),
+    IT("it"),
+    JA("ja"),
+    KO("ko"),
+    PL("pl"),
+    PT_BR("pt-br"),
+    RU("ru"),
+    TR("tr"),
+    ZH_CN("zh-cn"),
+    ZH_TW("zh-tw");
+    
+    override fun toString() = value
+}
+
+
 internal class Configurations : BaseState() {
     var alwaysUseGlobal by property(false)
     var globalExecutable by string(null)
@@ -29,4 +50,5 @@ internal class Configurations : BaseState() {
     var autoRestartServer by property(false)
     var monkeypatchAutoImportDetails by property(true)
     var monkeypatchTrailingQuoteBug by property(true)
+    var locale by enum(Locale.DEFAULT)
 }
