@@ -11,9 +11,12 @@ For code changes, see [`CHANGELOG_CODE.md`][_-1].
 
 ## [Unreleased]
 
-### Added
+This plugin is deprecated. Install [the <i>Pyright</i> plugin][1] instead.
+See [the migration guide][2] for more information.
 
-* The locale can now be configured directly from the UI.
+
+  [1]: https://github.com/InSyncWithFoo/pyright-for-pycharm
+  [2]: https://insyncwithfoo.github.io/pyright-for-pycharm/migration-guide/
 
 
 ## [1.1.0] - 2024-08-13

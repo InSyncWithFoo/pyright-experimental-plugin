@@ -6,6 +6,15 @@
 [![Rating](https://img.shields.io/jetbrains/plugin/r/rating/24146)][8]
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/24146)][9]
 
+> [!NOTE]
+> This plugin is deprecated. Install [the <i>Pyright</i> plugin][3] instead.
+> See [the migration guide][0] for more information.
+
+
+  [0]: https://insyncwithfoo.github.io/pyright-for-pycharm/migration-guide/
+
+---
+
 ![](./.github/readme/demo-1.png)
 
 <!-- Plugin description -->
